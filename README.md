@@ -46,7 +46,10 @@ The --nostem <nostem> argument allows you to specify a file containing a list of
 ./plotsummary.py rawcount ~/Barth/ ~/term_file.txt -d -n ~/data/no_stem.txt -c 'University Terms' > ~/Averages.out
 
 __Input files__
+
+
 Inside ~/term_file.txt:
+
     university
     professor
     student
@@ -54,6 +57,7 @@ Inside ~/term_file.txt:
     college
 
 Inside ~/data/no_stem.txt:
+
     university
 
 In the directory ~/Barth is a plaintext version of John Barth's novel, _Giles Goat Boy_.
