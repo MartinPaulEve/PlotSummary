@@ -85,6 +85,8 @@ class KernelDensity (Debuggable):
             if self.nostem:
                 with open(self.nostem) as f:
                     nostem_words = set(f.read().splitlines())
+            else:
+                nostem_words = []
 
             for term in self.terms:
                 if not term in nostem_words:
