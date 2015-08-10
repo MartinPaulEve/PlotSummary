@@ -44,7 +44,7 @@ class KernelDensity (Debuggable):
         self.in_dir = self.args['<directory>']
         self.term_file = self.args['<term_file>']
 
-        self.terms = [line.strip() for line in open(self.term_file)]
+        self.terms = [line.strip().lower() for line in open(self.term_file)]
 
         self.dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -69,7 +69,7 @@ class KernelDensity (Debuggable):
             self.second_term_file = self.args['<second_term_file>']
             self.term_name = self.args['<term_name>']
             self.second_term_name = self.args['<second_term_name>']
-            self.second_terms = [line.strip() for line in open(self.second_term_file)]
+            self.second_terms = [line.strip().lower() for line in open(self.second_term_file)]
             self.action = 'group'
         elif self.args['hist']:
             self.action = 'hist'
