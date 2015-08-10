@@ -41,7 +41,9 @@ The --caption option allows you to title the resulting graph.
 
 The --debug option will let you see what's going on. I recommend enabling it.
 
-The --nostem <nostem> argument allows you to specify a file containing a list of words that should be exempt from stemming. PlotSummary uses the Porter2 algorithm for stemming, which has some known false positives. For instance, "university" becomes "univers". The debug option (as above) will show how your terms are being stemmed. You can, therefore, use the nostem list to specify that such terms should be exempted.
+The --nostem option allows you to specify a file containing a list of words that should be exempt from stemming. PlotSummary uses the Porter2 algorithm for stemming, which has some known false positives. For instance, "university" becomes "univers". The debug option (as above) will show how your terms are being stemmed. You can, therefore, use the nostem list to specify that such terms should be exempted.
+
+The --words option allows you to set the number of words sampled in hist and rawcount modes.
 
 #Example usage
 ./plotsummary.py rawcount ~/Barth/ ~/term_file.txt -d -n ~/data/no_stem.txt -c 'University Terms' > ~/Averages.out
