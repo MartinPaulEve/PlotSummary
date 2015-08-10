@@ -20,6 +20,7 @@ A great deal of the groundwork for PlotSummary was achieved by David McClure, wh
         -h --help                                       Show this screen.
         -n, --nostem <nostem>                           Specify a path containing words that should not be stemmed
         --version                                       Show version.
+        -w, --words <words>                             Specify the word frequency to sample (default: 5000)
     """
 
 There are four different modes in which PlotSummary can be run, which should be passed as the first argument to the script: single, hist, group and rawcount.
