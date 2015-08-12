@@ -115,7 +115,7 @@ class KernelDensity (Debuggable):
                 nostem_words = []
 
             for term in self.terms:
-                if not term in nostem_words:
+                if not term in nostem_words and term != Text.show_stem(term):
                     self.debug.print_debug(self, u'{0} will be stemmed to {1}'.format(term, Text.show_stem(term)))
                 else:
                     self.debug.print_debug(self, u'{0} will not be stemmed'.format(term))
