@@ -99,7 +99,7 @@ In ~/Barth/Barth.png:
 
 #Example usage: search and overlap
 
-~/Documents/Programming/PlotSummary/plotsummary.py search ~/GR/ blicero 20 --debug > out.txt
+./plotsummary.py search ~/GR/ blicero 20 --debug > out.txt
 
 __Input Files__
 In the directory ~/GR is a single plaintext version of Thomas Pynchon's _Gravity's Rainbow_ (Pynchon.txt).
@@ -138,11 +138,11 @@ These are the terms, in _Gravity's Rainbow_ that most closely correlate to Blice
 
 We can verify this through two commands and the resulting output graphs:
 
-~/Documents/Programming/PlotSummary/plotsummary.py overlap ~/GR/ blicero gottfried --debug
+./plotsummary.py overlap ~/GR/ blicero gottfried --debug
 
 ![Blicero and Gottfried in Gravity's Rainbow](docs/PynchonExample2.png?raw=true)
 
-~/Documents/Programming/PlotSummary/plotsummary.py overlap ~/GR/ blicero thanatz --debug
+./plotsummary.py overlap ~/GR/ blicero thanatz --debug
 
 ![Blicero and Thanatz in Gravity's Rainbow](docs/PynchonExample1.png?raw=true)
 
