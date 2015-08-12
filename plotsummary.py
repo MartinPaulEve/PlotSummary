@@ -10,6 +10,7 @@ Usage:
     plotsummary.py group <directory> <term_file> <term_name> <second_term_file> <second_term_name> [options]
     plotsummary.py overlap <directory> <first_term> <second_term> [options]
     plotsummary.py rawcount <directory> <term_file> [options]
+    plotsummary.py search <directory> <term> <count> [options]
     plotsummary.py (-h | --help)
     plotsummary.py --version
 
@@ -55,6 +56,13 @@ class KernelDensity (Debuggable):
             self.terms.append(self.args["<first_term>"])
             self.terms.append(self.args["<second_term>"])
 
+        elif self.args["<term>"]:
+            self.terms = []
+            self.terms.append(self.args["<term>"])
+
+        if self.args["<count>"]:
+            self.max = int(self.args["<count>"])
+
         self.dir = os.path.dirname(os.path.abspath(__file__))
 
         if self.args['--debug']:
@@ -86,6 +94,8 @@ class KernelDensity (Debuggable):
             self.action = 'rawcount'
         elif self.args['overlap']:
             self.action = 'overlap'
+        elif self.args['search']:
+            self.action = 'search'
 
         if self.args['--words']:
             self.words = int(self.args['--words'])
@@ -145,10 +155,25 @@ class KernelDensity (Debuggable):
         elif self.action == 'overlap':
             graph = textplot.plot_kde_overlap(self.terms)
 
-        self.debug.print_debug(self, u'Saving ' + file_name.replace('.txt', '.png'))
+        elif self.action == 'search':
+            newterms = textplot.anchored_scores(self.terms[0])
 
-        graph.savefig(join(self.in_dir, file_name.replace('.txt', '.png')))
-        graph.close()
+            count = 0
+            self.debug.print_(self, u'Top twenty correlated terms (with more than one occurrence) for {0}: '.format(self.terms[0]))
+
+            for item in newterms:
+                if len(textplot.terms[item]) > 1 and item != textplot.stem(self.terms[0]):
+                    if count > self.max:
+                        break
+
+                    self.debug.print_(self, item)
+                    count += 1
+
+        if self.action != 'search':
+            self.debug.print_debug(self, u'Saving ' + file_name.replace('.txt', '.png'))
+
+            graph.savefig(join(self.in_dir, file_name.replace('.txt', '.png')))
+            graph.close()
 
 def main():
     cwf_instance = KernelDensity()

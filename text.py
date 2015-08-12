@@ -345,3 +345,29 @@ class Text (Debuggable):
 
         return plt
 
+    def sort_dict(self, d, reverse=True):
+
+        """
+        Sort an ordered dictionary by value, descending.
+        :param d: A dictionary.
+        """
+
+        sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=reverse)
+        return OrderedDict(sort)
+
+    def anchored_scores(self, anchor, method='braycurtis', **kwargs):
+
+        """
+        Compute the intersections between an anchor term and all other terms.
+        :param anchor: The anchor term.
+        :param method: The scoring function.
+        """
+
+        evaluator = getattr(self, 'score_'+method)
+
+        pairs = OrderedDict()
+        for term in self.terms:
+            pairs[term] = evaluator(anchor, term, **kwargs)
+
+        return self.sort_dict(pairs)
+

@@ -12,6 +12,7 @@ A great deal of the groundwork for PlotSummary was achieved by David McClure, wh
         plotsummary.py group <directory> <term_file> <term_name> <second_term_file> <second_term_name> [options]
         plotsummary.py overlap <directory> <first_term> <second_term> [options]
         plotsummary.py rawcount <directory> <term_file> [options]
+        plotsummary.py search <directory> <term> <count> [options]
         plotsummary.py (-h | --help)
         plotsummary.py --version
 
@@ -24,7 +25,7 @@ A great deal of the groundwork for PlotSummary was achieved by David McClure, wh
         -w, --words <words>                             Specify the word frequency to sample (default: 5000)
     """
 
-There are five different modes in which PlotSummary can be run, which should be passed as the first argument to the script: single, hist, group, overlap and rawcount.
+There are six different modes in which PlotSummary can be run, which should be passed as the first argument to the script: single, hist, group, overlap,rawcount and search.
 
 Single mode will produce a kernel density estimate graph for the provided terms.
 
@@ -36,11 +37,15 @@ Overlap mode will produce a graph showing the degree to which two terms overlap 
 
 Rawcount mode will produce a line graph of term frequencies across 5,000 word intervals.
 
+Search mode will take a single term and tell you the top X other terms that occur in the same areas of the text.
+
 The "term_file" (and "second_term_file") argument(s) should be an absolute path to a file that contains a list of terms to plot; one term per line.
 
 The "term_name" (and "second_term_name") argument(s) should be strings given on the command line. These will be used as labels for each set of terms.
 
-First_Term and Second_Term arguments for options that compare two terms should just be the raw terms.
+"first_term" and second_term" arguments for options that compare two terms should just be the raw terms.
+
+The "count" argument (used with search) will let you limit the number of results.
 
 The --caption option allows you to title the resulting graph.
 
@@ -50,7 +55,7 @@ The --nostem option allows you to specify a file containing a list of words that
 
 The --words option allows you to set the number of words sampled in hist and rawcount modes.
 
-#Example usage
+#Example usage: rawcount
 ./plotsummary.py rawcount ~/Barth/ ~/term_file.txt -d -n ~/data/no_stem.txt -c 'University Terms' > ~/Averages.out
 
 __Input files__
@@ -91,6 +96,56 @@ In ~/Averages.out:
 In ~/Barth/Barth.png:
 
 ![Barth](docs/JohnBarthExample.png?raw=true)
+
+#Example usage: search and overlap
+
+~/Documents/Programming/PlotSummary/plotsummary.py search ~/GR/ blicero 20 --debug > out.txt
+
+__Input Files__
+In the directory ~/GR is a single plaintext version of Thomas Pynchon's _Gravity's Rainbow_ (Pynchon.txt).
+
+__Output Files__
+
+In out.txt:
+
+    [plotsummary] blicero will be stemmed to blicero
+    [plotsummary] Loading Pynchon.txt
+    [plotsummary] Plotting Pynchon.txt
+    [plotsummary] Top twenty correlated terms (with more than one occurrence) for blicero: 
+    [plotsummary] gottfri
+    [plotsummary] lager
+    [plotsummary] wandervogel
+    [plotsummary] thanatz
+    [plotsummary] kalahari
+    [plotsummary] stadt
+    [plotsummary] flotsam
+    [plotsummary] recogniz
+    [plotsummary] execution
+    [plotsummary] asham
+    [plotsummary] tray
+    [plotsummary] silhouett
+    [plotsummary] heath
+    [plotsummary] crotch
+    [plotsummary] fungu
+    [plotsummary] crippl
+    [plotsummary] erd
+    [plotsummary] exempt
+    [plotsummary] butt
+    [plotsummary] wand
+    [plotsummary] infinit
+
+These are the terms, in _Gravity's Rainbow_ that most closely correlate to Blicero.
+
+We can verify this through two commands and the resulting output graphs:
+
+~/Documents/Programming/PlotSummary/plotsummary.py overlap ~/GR/ blicero gottfried --debug
+
+![Blicero and Gottfried in Gravity's Rainbow](docs/PynchonExample2.png?raw=true)
+
+~/Documents/Programming/PlotSummary/plotsummary.py overlap ~/GR/ blicero thanatz --debug
+
+![Blicero and Thanatz in Gravity's Rainbow](docs/PynchonExample1.png?raw=true)
+
 
 #Components and Licensing
 PlotSummary is copyright Martin Paul Eve 2015. It is released under the terms specified in [LICENSE](LICENSE).
