@@ -10,6 +10,7 @@ A great deal of the groundwork for PlotSummary was achieved by David McClure, wh
         plotsummary.py single <directory> <term_file> [options]
         plotsummary.py hist <directory> <term_file> [options]
         plotsummary.py group <directory> <term_file> <term_name> <second_term_file> <second_term_name> [options]
+        plotsummary.py overlap <directory> <first_term> <second_term> [options]
         plotsummary.py rawcount <directory> <term_file> [options]
         plotsummary.py (-h | --help)
         plotsummary.py --version
@@ -23,7 +24,7 @@ A great deal of the groundwork for PlotSummary was achieved by David McClure, wh
         -w, --words <words>                             Specify the word frequency to sample (default: 5000)
     """
 
-There are four different modes in which PlotSummary can be run, which should be passed as the first argument to the script: single, hist, group and rawcount.
+There are five different modes in which PlotSummary can be run, which should be passed as the first argument to the script: single, hist, group, overlap and rawcount.
 
 Single mode will produce a kernel density estimate graph for the provided terms.
 
@@ -31,11 +32,15 @@ Group mode will produce a kernel density estimates for two groups of provided te
 
 Hist mode will produce a histogram of term frequencies spread across 5,000 word intervals.
 
+Overlap mode will produce a graph showing the degree to which two terms overlap in a kernel density estimation (using Bray-Curtis dissimilarity).
+
 Rawcount mode will produce a line graph of term frequencies across 5,000 word intervals.
 
 The "term_file" (and "second_term_file") argument(s) should be an absolute path to a file that contains a list of terms to plot; one term per line.
 
 The "term_name" (and "second_term_name") argument(s) should be strings given on the command line. These will be used as labels for each set of terms.
+
+First_Term and Second_Term arguments for options that compare two terms should just be the raw terms.
 
 The --caption option allows you to title the resulting graph.
 

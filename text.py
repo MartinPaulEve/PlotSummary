@@ -11,6 +11,7 @@ from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict
 from functools32 import lru_cache
+from scipy.spatial import distance
 
 class Text (Debuggable):
 
@@ -294,6 +295,49 @@ class Text (Debuggable):
         w_patch = mpatches.Patch(color='#e8a945', label=term_name)
         p_patch = mpatches.Patch(color='#0067a2', label=second_term_name)
         plt.legend(handles=[w_patch, p_patch], loc='upper right')
+
+        fig = plt.gcf()
+        fig.set_size_inches(10, 4)
+        fig.tight_layout()
+
+        return plt
+
+    def score_braycurtis(self, term1, term2, **kwargs):
+
+        """
+        Compute a weighting score based on the "City Block" distance between
+        the kernel density estimates of two terms.
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        t1_kde = self.kde(term1, **kwargs)
+        t2_kde = self.kde(term2, **kwargs)
+
+        return 1-distance.braycurtis(t1_kde, t2_kde)
+
+    def plot_kde_overlap(self, terms, color1='#0067a2', color2='#e8a945', overlap_color='#dddddd', **kwargs):
+
+        term1 = terms[0]
+        term2 = terms[1]
+
+        t1 = self.stem(term1)
+        t2 = self.stem(term2)
+
+        bc = self.score_braycurtis(t1, t2, **kwargs)
+
+        kde1 = self.kde(t1, **kwargs)
+        kde2 = self.kde(t2, **kwargs)
+        plt.plot(kde1, color=color1, label=term1)
+        plt.plot(kde2, color=color2, label=term2)
+
+        overlap = np.minimum(kde1, kde2)
+        plt.fill(overlap, color=overlap_color)
+        plt.title(term1+', '+term2+' - '+str(round(bc, 4)))
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.legend(loc='upper right')
 
         fig = plt.gcf()
         fig.set_size_inches(10, 4)

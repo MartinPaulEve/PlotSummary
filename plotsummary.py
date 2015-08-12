@@ -8,6 +8,7 @@ Usage:
     plotsummary.py single <directory> <term_file> [options]
     plotsummary.py hist <directory> <term_file> [options]
     plotsummary.py group <directory> <term_file> <term_name> <second_term_file> <second_term_name> [options]
+    plotsummary.py overlap <directory> <first_term> <second_term> [options]
     plotsummary.py rawcount <directory> <term_file> [options]
     plotsummary.py (-h | --help)
     plotsummary.py --version
@@ -18,6 +19,7 @@ Options:
     -h --help                                       Show this screen.
     -n, --nostem <nostem>                           Specify a path containing words that should not be stemmed
     --version                                       Show version.
+    -w, --words <words>                             Specify the word frequency to sample (default: 5000)
 """
 
 import os
@@ -42,9 +44,16 @@ class KernelDensity (Debuggable):
         Debuggable.__init__(self, 'plotsummary')
 
         self.in_dir = self.args['<directory>']
-        self.term_file = self.args['<term_file>']
 
-        self.terms = [line.strip().lower() for line in open(self.term_file)]
+        if self.args['<term_file>']:
+            self.term_file = self.args['<term_file>']
+
+            self.terms = [line.strip().lower() for line in open(self.term_file)]
+
+        elif self.args["<first_term>"] and self.args["<second_term>"]:
+            self.terms = []
+            self.terms.append(self.args["<first_term>"])
+            self.terms.append(self.args["<second_term>"])
 
         self.dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -75,6 +84,13 @@ class KernelDensity (Debuggable):
             self.action = 'hist'
         elif self.args['rawcount']:
             self.action = 'rawcount'
+        elif self.args['overlap']:
+            self.action = 'overlap'
+
+        if self.args['--words']:
+            self.words = int(self.args['--words'])
+        else:
+            self.words = 5000
 
     @staticmethod
     def read_command_line():
@@ -109,9 +125,11 @@ class KernelDensity (Debuggable):
 
     def plot(self, file_name):
         self.debug.print_debug(self, u'Loading ' + file_name)
+
         textplot = Text.from_file(join(self.in_dir, file_name), self.debug, nostem=self.nostem)
 
         self.debug.print_debug(self, u'Plotting ' + file_name)
+
         if self.action == 'single':
             graph = textplot.plot_terms(self.terms, self.caption)
 
@@ -119,13 +137,17 @@ class KernelDensity (Debuggable):
             graph = textplot.plot_terms_two_groups(self.terms, self.term_name, self.second_terms,self.second_term_name, self.caption)
 
         elif self.action == 'hist':
-            graph = textplot.plot_terms_histogram(self.terms, self.caption, 5000)
+            graph = textplot.plot_terms_histogram(self.terms, self.caption, self.words)
+
         elif self.action == 'rawcount':
-            graph = textplot.plot_terms_raw_count(self.terms, self.caption, 5000)
+            graph = textplot.plot_terms_raw_count(self.terms, self.caption, self.words)
+
+        elif self.action == 'overlap':
+            graph = textplot.plot_kde_overlap(self.terms)
 
         self.debug.print_debug(self, u'Saving ' + file_name.replace('.txt', '.png'))
-        graph.savefig(join(self.in_dir, file_name.replace('.txt', '.png')))
 
+        graph.savefig(join(self.in_dir, file_name.replace('.txt', '.png')))
         graph.close()
 
 def main():
