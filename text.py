@@ -88,12 +88,15 @@ class Text (Debuggable):
                 self.stopwords = set(f.read().splitlines())
 
         else:
-            self.stopwords = set(
-                pkgutil
-                .get_data('textplot', 'data/stopwords.txt')
-                .decode('utf8')
-                .splitlines()
-            )
+            try:
+                self.stopwords = set(
+                    pkgutil
+                    .get_data('textplot', 'data/stopwords.txt')
+                    .decode('utf8')
+                    .splitlines()
+                )
+            except:
+                self.stopwords = []
 
     def tokenize(self):
 
