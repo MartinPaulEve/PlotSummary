@@ -1,0 +1,12 @@
+ipython
+scikit-learn
+numpy
+scipy
+matplotlib
+nltk
+networkx
+clint
+pytest
+click
+stemming
+functools32
